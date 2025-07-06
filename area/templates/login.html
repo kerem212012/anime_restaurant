@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Domain & Punch{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}" type="text/css">
+{% endblock %}
+{% block extra_body %}
+<div class="container">
+    <h1>Login</h1>
+    <h3>Enter your login credentials</h3>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="wrap">
+            <button type="submit">
+                Submit
+            </button>
+        </div>
+    </form>
+
+    <p>Not registered?
+        <a href="registration" style="text-decoration: none;">
+            Create an account
+        </a>
+    </p>
+</div>
+{% endblock %}
