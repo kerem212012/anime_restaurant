@@ -1,9 +1,9 @@
-from django.contrib.auth import login, logout, authenticate
 from django.http import Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 
 from area.models import Food, FoodCategory, MerchCategory, Merch, Event
-from user.forms import UserRegisterForm, UserLoginForm
+from manager.forms import ManagerFeedbackForm
+from manager.models import Feedback
 
 
 def index(request):
@@ -17,13 +17,23 @@ def index(request):
         "food_categories": food_categories,
         "merch_categories": merch_categories,
         "merchs": merchs,
-        "events":event,
+        "events": event,
     }
-    return render(request, "index.html", context=context)
+    return render(request, "area/index.html", context=context)
 
 
 def contact(request):
-    return render(request, "contact.html")
+    if request.method == "POST":
+        form = ManagerFeedbackForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data.get("name")
+            email = form.cleaned_data.get("email")
+            message = form.cleaned_data.get("message")
+            Feedback.objects.create(name=name, email=email, message=message)
+
+    else:
+        form = ManagerFeedbackForm()
+    return render(request, "area/contact.html", context={"form": form})
 
 
 def shop(request):
@@ -39,7 +49,7 @@ def shop(request):
         "products_count": products_count,
         "merchs": merchs
     }
-    return render(request, "shop.html", context=context)
+    return render(request, "area/shop.html", context=context)
 
 
 def product(request, uuid):
@@ -47,46 +57,7 @@ def product(request, uuid):
     if not product:
         raise Http404("Продукт не найден")
 
-    return render(request, 'shop-details.html', {
+    return render(request, 'area/shop-details.html', {
         'product': product,
         'product_type': product._meta.model_name
     })
-
-
-
-
-def login_view(request):
-    if request.method == "POST":
-        form = UserLoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get("username")
-            password = form.cleaned_data.get("password")
-
-            user = authenticate(username=username, password=password)
-            if user:
-                login(request, user)
-                return redirect("/")
-
-    else:
-        form = UserLoginForm()
-    return render(request, "login.html", context={"form": form})
-
-
-def registration_view(request):
-    if request.method == "POST":
-        form = UserRegisterForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            password = form.cleaned_data.get("password")
-            user.set_password(password)
-            user.save()
-            login(request, user)
-            return redirect("/")
-    else:
-        form = UserRegisterForm()
-    return render(request, "registration.html", context={"form": form})
-
-
-def user_logout(request):
-    logout(request)
-    return redirect("/")
