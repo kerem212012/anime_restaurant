@@ -81,14 +81,13 @@ pip install -r requirements.txt
 
 4. Create a `.env` file in the root of the project and specify the variables (`SECRET_KEY`, `DEBUG`, `ALLOWED_HOSTS`)
 
-5. Инициализируйте базу данных:
+5. Migrate project and create superuser:
 
 
 ```bash
-python manage.py shell
-from app import db
-db.create_all()
-exit()
+python manage.py makemigration
+python manage.py migrate
+python manage.py createsuperuser
 ```
 
 6. Start the server:
@@ -120,4 +119,4 @@ python manage.py runserver
 
 ## 🎯 Project goal
 
-The site was created as ////
+The site was created for money making(fake)
