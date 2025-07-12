@@ -10,4 +10,6 @@ urlpatterns = [
     path("contact", views.contact, name="contact"),
     path("shop", views.shop, name="shop"),
     path("product/<uuid>", views.product, name="product"),
+    path("shopping-cart", views.shopping_cart, name="shopping-cart"),
+    path("checkout", views.checkout, name="checkout"),
 ]

@@ -11,13 +11,13 @@ def index(request):
     food_categories = FoodCategory.objects.all()
     merch_categories = MerchCategory.objects.all()
     merchs = Merch.objects.all()
-    event = Event.objects.all()
+    events = Event.objects.all()
     context = {
         "foods": foods,
         "food_categories": food_categories,
         "merch_categories": merch_categories,
         "merchs": merchs,
-        "events": event,
+        "events": events,
     }
     return render(request, "area/index.html", context=context)
 
@@ -61,3 +61,9 @@ def product(request, uuid):
         'product': product,
         'product_type': product._meta.model_name
     })
+
+def shopping_cart(request):
+    return render(request,"area/shopping-cart.html")
+
+def checkout(request):
+    return render(request,"area/checkout.html")
