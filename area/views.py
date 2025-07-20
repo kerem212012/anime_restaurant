@@ -90,3 +90,16 @@ def add_to_cart(request, product_type,uuid):
     else:
         OrderElement.objects.create(order=order,content_type=content_type,object_id=product.id,quantity=1,price=product.price)
     return redirect("area:shopping-cart")
+
+@login_required
+def remove_from_cart(request, product_type,uuid):
+    content_type = get_object_or_404(ContentType, model=product_type)
+    model_class = content_type.model_class()
+    product = get_object_or_404(model_class, uuid=uuid)
+    order, _ = Order.objects.get_or_create(user=request.user, is_draft=True)
+    if not order:
+        return redirect("area:shopping-cart")
+    element = OrderElement.objects.filter(order=order, content_type=content_type, object_id=product.id).first()
+    if element:
+        element.delete()
+    return redirect("area:shopping-cart")

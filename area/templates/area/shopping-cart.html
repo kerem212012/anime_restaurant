@@ -40,7 +40,10 @@
                                 $100
                             </td>
                             <td class="shoping__cart__item__close">
+                                <a href="{% url 'area:remove_from_cart' product_type='food' uuid=item.product.uuid %}"
+                                    onclick="return confirm('Удалить товар из корзины?');">
                                 <span class="icon_close"></span>
+                                </a>
                             </td>
                         </tr>
                         {% empty %}
