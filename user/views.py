@@ -1,5 +1,3 @@
-from base64 import urlsafe_b64encode
-
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
@@ -10,7 +8,7 @@ from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
-from user.forms import UserLoginForm, UserRegisterForm
+from user.forms import UserLoginForm, UserRegisterForm, UserSettingsForm
 
 
 def login_view(request):
@@ -37,28 +35,17 @@ def registration_view(request):
             user = form.save(commit=False)
             password = form.cleaned_data.get("password")
             user.set_password(password)
-            user.is_active=True
+            user.is_active = True
             user.save()
-            send_verification(request,user)
+            send_verification(request, user)
             login(request, user)
             return redirect("/")
     else:
         form = UserRegisterForm()
     return render(request, "user/registration.html", context={"form": form})
-def verify_email(request, uidb64, token):
-    User = get_user_model()
-    try:
-        uid = urlsafe_base64_decode(uidb64).decode()
-        user = User.objects.get(pk=uid)
-    except Exception:
-        user = None
 
-    if user and default_token_generator.check_token(user, token):
-        user.email_verified = True
-        user.save()
-        return render(request, "user/email_verified_success.html")
-    return render(request, "user/email_verified_failed.html")
-def send_verification(request,user):
+
+def send_verification(request, user):
     token = default_token_generator.make_token(user)
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     domain = get_current_site(request).domain
@@ -77,6 +64,7 @@ def user_logout(request):
     logout(request)
     return redirect("/")
 
+
 def verify_email(request, uidb64, token):
     User = get_user_model()
     try:
@@ -90,3 +78,16 @@ def verify_email(request, uidb64, token):
         user.save()
         return render(request, "user/email_verified_success.html")
     return render(request, "user/email_verified_failed.html")
+
+def profile(request):
+    if request.method == "POST":
+        form = UserSettingsForm(request.POST,request.FILES)
+        if form.is_valid():
+            for field, value in form.cleaned_data.items():
+                if value:
+                    setattr(request.user, field, value)
+            request.user.save()
+            return redirect("/")
+    else:
+        form = UserSettingsForm()
+    return render(request, "user/profile-settings.html", context={"form": form})

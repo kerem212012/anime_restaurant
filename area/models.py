@@ -96,6 +96,7 @@ class Order(models.Model):
         verbose_name="User"
     )
     address = models.TextField(verbose_name="Delivery address")
+    is_draft = models.BooleanField(default=True,verbose_name="Is Draft")
     comment = models.TextField(max_length=200, verbose_name="Comment", blank=True)
     registered_at = models.DateTimeField(verbose_name="Registered at", default=timezone.now)
     called_at = models.DateTimeField(verbose_name="Called at", db_index=True, blank=True, null=True)

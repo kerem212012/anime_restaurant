@@ -1,7 +1,9 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 
-from area.models import Food, FoodCategory, MerchCategory, Merch, Event
+from area.models import Food, FoodCategory, MerchCategory, Merch, Event, Order, OrderElement
 from manager.forms import ManagerFeedbackForm
 from manager.models import Feedback
 
@@ -11,7 +13,7 @@ def index(request):
     food_categories = FoodCategory.objects.all()
     merch_categories = MerchCategory.objects.all()
     merchs = Merch.objects.all()
-    events = Event.objects.all()
+    events = Event.objects.select_related("anime").all()
     context = {
         "foods": foods,
         "food_categories": food_categories,
@@ -63,7 +65,28 @@ def product(request, uuid):
     })
 
 def shopping_cart(request):
-    return render(request,"area/shopping-cart.html")
+    order = Order.objects.filter(user=request.user,is_draft=True).first()
+    items = order.orders.all() if order else []
+    total = sum(item.price * item.quantity for item in items)
+    return render(request,"area/shopping-cart.html",context={
+        "order":order,
+        "items":items,
+        "total":total,
+    })
 
 def checkout(request):
     return render(request,"area/checkout.html")
+
+@login_required
+def add_to_cart(request, product_type,uuid):
+    content_type = get_object_or_404(ContentType,model=product_type)
+    model_class = content_type.model_class()
+    product=get_object_or_404(model_class,uuid=uuid)
+    order,_=Order.objects.get_or_create(user=request.user,is_draft=True)
+    element = OrderElement.objects.filter(order=order,content_type=content_type,object_id=product.id).first()
+    if element:
+        element.quantity += 1
+        element.save()
+    else:
+        OrderElement.objects.create(order=order,content_type=content_type,object_id=product.id,quantity=1,price=product.price)
+    return redirect("area:shopping-cart")

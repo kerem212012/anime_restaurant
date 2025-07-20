@@ -10,7 +10,7 @@ class CustomUser(AbstractUser):
     last_name = models.CharField(max_length=50,verbose_name="Last Name")
     phone_number = PhoneNumberField(verbose_name="Phone Number")
     email = models.EmailField(max_length=50, unique=True, blank=True,verbose_name="E-mail")
-    picture = models.ImageField(blank=True, verbose_name="Picture")  # TODO make default
+    picture = models.ImageField(blank=True, verbose_name="Picture",upload_to="user_pictures", default="user_pictures/default.png")  # TODO make default
     email_verifed=models.BooleanField(default=False)
 
     def __str__(self):

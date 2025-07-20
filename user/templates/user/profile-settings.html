@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Domain & Punch{% endblock %}
+
+{% block extra_body %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <!-- Page title -->
+            <div class="my-5">
+                <h3>My Profile</h3>
+                <hr>
+            </div>
+            <!-- Form START -->
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <!-- Contact detail -->
+                    <div class="">
+                        <div class="">
+                            <div class="row">
+
+                                <!-- First Name -->
+                                <div class="col-md-7" style="width:600px">
+                                    <h4 class="mb-4 mt-0">Contact detail</h4>
+                                    <div class="mb-3">
+                                        {{ form.username }}
+                                    </div>
+                                    <div class="mb-3">
+                                        {{ form.first_name }}
+                                    </div>
+                                    <div class="mb-3">
+                                        {{ form.last_name }}
+                                    </div>
+                                    <div class="mb-3">
+                                        {{ form.phone_number }}
+                                    </div>
+                                    <div class="mb-3">
+                                        {{ form.email }}
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="col-md-5 text-center" style="width:600px">
+                                    <h4 class="mb-4 mt-0">Upload your profile photo</h4>
+                                    <!-- Image upload -->
+                                    <div class="square position-relative display-2 mb-3">
+                                        <img src="{{ user.picture.url }}" alt="profile picture" width="200" height="200">
+                                    </div>
+
+                                    <!-- Button -->
+                                    <div class="humberger__menu__overlay">
+                                        {{ form.picture }}
+
+
+
+                                        <label class="site-btn" for="customFile">Upload</label>
+                                    </div>
+                                    <!-- Content -->
+                                </div>
+
+                            </div> <!-- Row END -->
+                        </div>
+                    </div>
+
+                    <!-- Upload profile -->
+                <!-- change password -->
+
+                 <!-- Row END -->
+                </div>
+                <div class="gap-3 d-md-flex justify-content-md-end text-center">
+                    <button type="submit" class="btn btn-primary btn-lg">Update profile</button>
+
+                </div>
+			</form>
+            <br>
+        <!-- Form END -->
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

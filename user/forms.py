@@ -57,3 +57,59 @@ class UserLoginForm(forms.Form):
         }
     )
 
+class UserSettingsForm(forms.Form):
+    #contacts
+    username = forms.CharField(
+        label="Username",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your Username'}),
+        error_messages={
+            'required': "Username can't be empty."
+        }
+    )
+    email = forms.EmailField(
+        label="Username",
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter your E-mail'}),
+        error_messages={
+            'required': "Username can't be empty."
+        }
+
+    )
+    phone_number = PhoneNumberField(
+        label="Phone Number",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': "Enter your Phone Number"}),
+        error_messages = {
+            'required': "Phone Number can't be empty."
+        }
+    )
+    first_name = forms.CharField(
+        label="First Name",
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your First Name'}),
+    )
+    last_name = forms.CharField(
+        label="Last Name",
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your Last Name'}),
+    )
+    #picture
+    picture = forms.ImageField(
+        label="Picture",
+        required=False,
+        widget=forms.ClearableFileInput(attrs={"hidden":True,"id":"customFile"}),
+    )
+
+
+class UserChangePasswordForm(forms.Form):
+    #password change
+    old_password=forms.CharField(
+        label="Old password",
+        widget = forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': "Enter your Old Password"})
+    )
+    new_password = forms.CharField(
+        label="New Password",
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': "Enter your New Password"}),
+    )
+    confirm_password = forms.CharField(
+        label="Confirm Password",
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': "Enter Confirm Password"}),
+    )
