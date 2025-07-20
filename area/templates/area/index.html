@@ -11,14 +11,14 @@
                 {% for category in food_categories %}
                 <div class="col-lg-3">
                     <div class="categories__item set-bg" data-setbg="{{ category.picture.url }}">
-                        <h5><a href="#">{{ category.name }}</a></h5>
+                        <h5><a href="shop">{{ category.name }}</a></h5>
                     </div>
                 </div>
                 {% endfor %}
                 {% for category in merch_categories %}
                 <div class="col-lg-3">
                     <div class="categories__item set-bg" data-setbg="{{ category.picture.url }}">
-                        <h5><a href="#">{{ category.name }}</a></h5>
+                        <h5><a href="shop">{{ category.name }}</a></h5>
                     </div>
                 </div>
                 {% endfor %}
@@ -39,17 +39,19 @@
                 <div class="featured__controls">
                     <ul>
                         <li class="active" data-filter="*">All</li>
-                        <li data-filter=".oranges">Drinks</li>
-                        <li data-filter=".fresh-meat">Fresh Meat</li>
-                        <li data-filter=".vegetables">Vegetables</li>
-                        <li data-filter=".fastfood">Fastfood</li>
+                        {% for category in food_categories %}
+                        <li data-filter=".{{ category.name }}">{{ category.name }}</li>
+                        {% endfor %}
+                        {% for category in merch_categories %}
+                        <li data-filter=".{{ category.name }}">{{ category.name }}</li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
         </div>
         <div class="row featured__filter">
             {% for food in foods %}
-            <div class="col-lg-3 col-md-4 col-sm-6 mix oranges">
+            <div class="col-lg-3 col-md-4 col-sm-6 mix {{ food.category.name }}">
                 <div class="featured__item">
                     <div class="featured__item__pic set-bg" data-setbg="{{ food.picture.url }}">
                         <ul class="featured__item__pic__hover">
@@ -64,7 +66,7 @@
             </div>
             {% endfor %}
             {% for merch in merchs %}
-            <div class="col-lg-3 col-md-4 col-sm-6 mix oranges">
+            <div class="col-lg-3 col-md-4 col-sm-6 mix {{ merch.merch_category.name }}">
                 <div class="featured__item">
                     <div class="featured__item__pic set-bg" data-setbg="{{ merch.picture.url }}">
                         <ul class="featured__item__pic__hover">
