@@ -37,9 +37,13 @@
     </div>
     <div class="humberger__menu__cart">
         <ul>
-            <li><a href="shopping-cart"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+            <li>
+                <a href="{% url 'area:shopping-cart' %}">
+                    <i class="fa fa-shopping-bag"></i> <span>{{ cart_count }}</span>
+                </a>
+            </li>
         </ul>
-        <div class="header__cart__price">item: <span>$150.00</span></div>
+        <div class="header__cart__price">items: <span>${{ cart_total }}</span></div>
     </div>
     <div class="humberger__menu__widget">
         <div class="header__top__right__auth">
@@ -49,10 +53,12 @@
             <a href="{% url 'user:login' %}"><i class="fa fa-user"></i> Login</a>
             {% else %}
             {% if user.is_superuser %}
-            <a href="{% url 'user:profile' %}"><img src="{{ user.picture.url }}" alt="profile picture" width="40" height="40"> {{ user }}(Admin)</a>
+            <a href="{% url 'user:profile' %}"><img src="{{ user.picture.url }}" alt="profile picture" width="40"
+                                                    height="40"> {{ user }}(Admin)</a>
             |
             {% else %}
-            <a href="{% url 'user:profile' %}"><img src="{{ user.picture.url }}" alt="profile picture" width="40" height="40"> {{ user }}</a>
+            <a href="{% url 'user:profile' %}"><img src="{{ user.picture.url }}" alt="profile picture" width="40"
+                                                    height="40"> {{ user }}</a>
             |
             {% endif %}
             <a href="{% url 'user:logout' %}"><i class="fa fa-sign-out"></i>Log out(GET OUT!)</a>
@@ -98,10 +104,12 @@
                             <a href="{% url 'user:login' %}"><i class="fa fa-user"></i> Login</a>
                             {% else %}
                             {% if user.is_superuser %}
-                            <a href="{% url 'user:profile' %}"><img src="{{ user.picture.url }}" alt="profile picture" width="40" height="40">{{ user }}(Admin)</a>
+                            <a href="{% url 'user:profile' %}"><img src="{{ user.picture.url }}" alt="profile picture"
+                                                                    width="40" height="40">{{ user }}(Admin)</a>
                             |
                             {% else %}
-                            <a href="{% url 'user:profile' %}"><img src="{{ user.picture.url }}" alt="profile picture" width="40" height="40"> {{ user }}</a>
+                            <a href="{% url 'user:profile' %}"><img src="{{ user.picture.url }}" alt="profile picture"
+                                                                    width="40" height="40"> {{ user }}</a>
                             |
                             {% endif %}
                             <a href="{% url 'user:logout' %}"><i class="fa fa-sign-out"></i>Log out(GET OUT!)</a>
@@ -131,9 +139,13 @@
             <div class="col-lg-3">
                 <div class="header__cart">
                     <ul>
-                        <li><a href="shopping-cart"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                        <li>
+                            <a href="{% url 'area:shopping-cart' %}">
+                                <i class="fa fa-shopping-bag"></i> <span>{{ cart_count }}</span>
+                            </a>
+                        </li>
                     </ul>
-                    <div class="header__cart__price">items: <span>$150.00</span></div>
+                    <div class="header__cart__price">items: <span>${{ cart_total }}</span></div>
                 </div>
             </div>
         </div>
