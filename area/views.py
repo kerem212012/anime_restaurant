@@ -64,39 +64,44 @@ def product(request, uuid):
         'product_type': product._meta.model_name
     })
 
+
 def shopping_cart(request):
-    order = Order.objects.filter(user=request.user,is_draft=True).first()
+    order = Order.objects.filter(user=request.user, is_draft=True).first()
     items = order.orders.all() if order else []
     total = sum(item.price * item.quantity for item in items)
-    return render(request,"area/shopping-cart.html",context={
-        "order":order,
-        "items":items,
-        "total":total,
+    return render(request, "area/shopping-cart.html", context={
+        "order": order,
+        "items": items,
+        "total": total,
     })
 
+
 def checkout(request):
-    return render(request,"area/checkout.html")
+    return render(request, "area/checkout.html")
+
 
 @login_required
-def add_to_cart(request, product_type,uuid):
-    content_type = get_object_or_404(ContentType,model=product_type)
-    model_class = content_type.model_class()
-    product=get_object_or_404(model_class,uuid=uuid)
-    order,_=Order.objects.get_or_create(user=request.user,is_draft=True)
-    element = OrderElement.objects.filter(order=order,content_type=content_type,object_id=product.id).first()
-    if element:
-        element.quantity += 1
-        element.save()
-    else:
-        OrderElement.objects.create(order=order,content_type=content_type,object_id=product.id,quantity=1,price=product.price)
-    return redirect("area:shopping-cart")
-
-@login_required
-def remove_from_cart(request, product_type,uuid):
+def add_to_cart(request, product_type, uuid):
     content_type = get_object_or_404(ContentType, model=product_type)
     model_class = content_type.model_class()
     product = get_object_or_404(model_class, uuid=uuid)
     order, _ = Order.objects.get_or_create(user=request.user, is_draft=True)
+    element = OrderElement.objects.filter(order=order, content_type=content_type, object_id=product.id).first()
+    if element:
+        element.quantity += 1
+        element.save()
+    else:
+        OrderElement.objects.create(order=order, content_type=content_type, object_id=product.id, quantity=1,
+                                    price=product.price)
+    return redirect("area:shopping-cart")
+
+
+@login_required
+def remove_from_cart(request, product_type, uuid):
+    content_type = get_object_or_404(ContentType, model=product_type)
+    model_class = content_type.model_class()
+    product = get_object_or_404(model_class, uuid=uuid)
+    order = Order.objects.filter(user=request.user, is_draft=True).first()
     if not order:
         return redirect("area:shopping-cart")
     element = OrderElement.objects.filter(order=order, content_type=content_type, object_id=product.id).first()
