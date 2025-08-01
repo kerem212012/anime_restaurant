@@ -61,7 +61,7 @@ def shop(request):
     food_categories = FoodCategory.objects.all()
     products_count = Food.objects.count() + Merch.objects.count()
     merchs = Merch.objects.all()
-    
+
     context = {
         "foods": foods,
         "food_categories": food_categories,

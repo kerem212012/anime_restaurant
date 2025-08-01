@@ -92,6 +92,10 @@ p {
 img {
 	max-width: 100%;
 }
+.size-30 {
+    font-size: 30px !important;
+
+}
 
 input:focus,
 select:focus,
@@ -729,7 +733,7 @@ ol {
 	height: 431px;
 	display: flex;
 	align-items: center;
-	padding-left: 475px;
+	padding-left: 450px;
 }
 
 .hero__text span {
@@ -746,6 +750,7 @@ ol {
 	line-height: 52px;
 	font-weight: 700;
 	margin: 10px 0;
+
 }
 
 .hero__text p {
@@ -1971,9 +1976,9 @@ ol {
 }
 
 .primary-btn.cart-btn {
-	color: #6f6f6f;
+	color: white;
 	padding: 14px 30px 12px;
-	background: #f5f5f5;
+	background: black;
 }
 
 .primary-btn.cart-btn span {
