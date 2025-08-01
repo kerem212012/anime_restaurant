@@ -97,13 +97,13 @@ class Order(models.Model):
     )
     address = models.TextField(verbose_name="Delivery address")
     is_draft = models.BooleanField(default=True,verbose_name="Is Draft")
-    comment = models.TextField(max_length=200, verbose_name="Comment", blank=True)
+    order_note = models.TextField(max_length=200, verbose_name="Order Note", blank=True)
     registered_at = models.DateTimeField(verbose_name="Registered at", default=timezone.now)
     called_at = models.DateTimeField(verbose_name="Called at", db_index=True, blank=True, null=True)
     delivered_at = models.DateTimeField(verbose_name="Delivered at", db_index=True, blank=True, null=True)
 
     def __str__(self):
-        return self.status
+        return f"{self.user.username} | {self.status}"
 
     class Meta:
         verbose_name = 'Order'
