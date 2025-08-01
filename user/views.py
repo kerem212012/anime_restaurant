@@ -79,6 +79,7 @@ def verify_email(request, uidb64, token):
         return render(request, "user/email_verified_success.html")
     return render(request, "user/email_verified_failed.html")
 
+
 def profile(request):
     if request.method == "POST":
         form = UserSettingsForm(request.POST,request.FILES)
