@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from area.models import FoodCategory, MerchCategory, FoodIngredient, Anime, Order, Food, OrderElement, Event, Payment, \
-    Merch
+    Merch, ProductCategory, ProductIngredient, Product
 
 IMAGE_HEIGHT = 200
 IMAGE_WIDTH = 200
@@ -26,6 +26,13 @@ class AdminMerchCategory(admin.ModelAdmin):
 class AdminFoodIngredient(admin.ModelAdmin):
     search_fields = ["name", ]
 
+@admin.register(ProductCategory)
+class AdminProductCategory(admin.ModelAdmin):
+    search_fields = ["name", ]
+
+@admin.register(ProductIngredient)
+class AdminProductIngredient(admin.ModelAdmin):
+    search_fields = ["name", ]
 
 @admin.register(Anime)
 class AdminAnime(admin.ModelAdmin):
@@ -46,6 +53,11 @@ class AdminOrder(admin.ModelAdmin):
 class AdminFood(admin.ModelAdmin):
     search_fields = ["name", ]
     raw_id_fields = ("anime", "category", "food_ingredient",)
+
+@admin.register(Product)
+class AdminProduct(admin.ModelAdmin):
+    search_fields = ["name", ]
+    raw_id_fields = ("anime", "product_category", "product_ingredient",)
 
 
 @admin.register(Event)

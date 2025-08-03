@@ -44,6 +44,23 @@ class MerchCategory(models.Model):
     def __str__(self):
         return self.name
 
+class ProductCategory(models.Model):
+    name = models.CharField(
+        'Name',
+        max_length=50
+    )
+    picture = models.ImageField(
+        'Picture'
+    )
+    description = models.TextField(
+        'Description',
+        blank=True,
+        max_length=300,
+    )
+
+    def __str__(self):
+        return self.name
+
 
 class FoodIngredient(models.Model):
     name = models.CharField(
@@ -62,6 +79,22 @@ class FoodIngredient(models.Model):
     def __str__(self):
         return self.name
 
+class ProductIngredient(models.Model):
+    name = models.CharField(
+        'Name',
+        max_length=50
+    )
+    picture = models.ImageField(
+        'Picture'
+    )
+    description = models.TextField(
+        'Description',
+        blank=True,
+        max_length=300,
+    )
+
+    def __str__(self):
+        return self.name
 
 class Anime(models.Model):
     name = models.CharField(max_length=50,verbose_name="Name")
@@ -260,10 +293,58 @@ class Merch(models.Model):
     anime = models.ForeignKey(
         Anime,
         on_delete=CASCADE,
-        related_name="animes",
+        related_name="animess",
         verbose_name="Anime"
     )
     size = CharField(max_length=50, verbose_name="Size")
+
+    def __str__(self):
+        return self.name
+
+class Product(models.Model):
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        unique=True
+    )
+    name = models.CharField(
+        'Name',
+        max_length=50
+    )
+    picture = models.ImageField(
+        'Picture'
+    )
+    description = models.TextField(
+        'Description',
+        blank=True,
+        max_length=300,
+    )
+    price = models.DecimalField(
+        'Price',
+        max_digits=8,
+        decimal_places=2,
+        validators=[MinValueValidator(0)]
+    )
+    product_category = models.ForeignKey(
+        ProductCategory,
+        on_delete=models.CASCADE,
+        verbose_name="Product Category"
+    )
+    product_ingredient = models.ForeignKey(
+        ProductIngredient,
+        related_name='ingredients',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        verbose_name="Product Ingredient"
+    )
+    anime = models.ForeignKey(
+        Anime,
+        on_delete=CASCADE,
+        related_name="animes",
+        verbose_name="Anime"
+    )
+    size = CharField(max_length=50, verbose_name="Size",null=True,blank=True)
 
     def __str__(self):
         return self.name
