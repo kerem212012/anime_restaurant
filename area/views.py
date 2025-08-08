@@ -5,22 +5,18 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 
 from area.forms import CheckoutForm
-from area.models import Food, FoodCategory, MerchCategory, Merch, Event, Order, OrderElement
+from area.models import Event, Order, OrderElement, Product, ProductCategory
 from manager.forms import ManagerFeedbackForm
 from manager.models import Feedback
 
 
 def index(request):
-    foods = Food.objects.all()
-    food_categories = FoodCategory.objects.all()
-    merch_categories = MerchCategory.objects.all()
-    merchs = Merch.objects.all()
+    products = Product.objects.all()
+    product_categories = ProductCategory.objects.all()
     events = Event.objects.select_related("anime").all()
     context = {
-        "foods": foods,
-        "food_categories": food_categories,
-        "merch_categories": merch_categories,
-        "merchs": merchs,
+        "products": products,
+        "product_categories": product_categories,
         "events": events,
     }
     return render(request, "area/index.html", context=context)
@@ -28,20 +24,15 @@ def index(request):
 
 def search(request):
     query = request.GET.get("q", "").strip()
-    foods = []
-    merchs = []
+    products = []
     if query:
-        foods = Food.objects.filter(
-            Q(name__icontains=query)
-        )
-        merchs = Merch.objects.filter(
+        products = Product.objects.filter(
             Q(name__icontains=query)
         )
     return render(request, "area/search-results.html", context={
         "query": query,
-        "foods": foods,
-        "merchs": merchs,
-        "results_count": len(foods) + len(merchs)
+        "products": products,
+        "results_count": len(products)
     })
 
 
@@ -62,28 +53,24 @@ def shop(request):
     min_price = request.GET.get("min_price")
     max_price = request.GET.get("max_price")
 
-    foods = Food.objects.all()
-    food_categories = FoodCategory.objects.all()
-    products_count = Food.objects.count() + Merch.objects.count()
-    merchs = Merch.objects.all()
+    products = Product.objects.all()
+    product_categories = ProductCategory.objects.all()
+    products_count = Product.objects.count()
 
     if min_price:
-        foods = foods.filter(price__gte=min_price)
-        merchs = merchs.filter(price__gte=min_price)
+        products = products.filter(price__gte=min_price)
     if max_price:
-        foods = foods.filter(price__lte=max_price)
-        merchs = merchs.filter(price__lte=max_price)
+        products = products.filter(price__lte=max_price)
     context = {
-        "foods": foods,
-        "food_categories": food_categories,
+        "products": products,
+        "product_categories": product_categories,
         "products_count": products_count,
-        "merchs": merchs,
     }
     return render(request, "area/shop.html", context=context)
 
 
 def product(request, uuid):
-    product = (Food.objects.filter(uuid=uuid).first() or Merch.objects.filter(uuid=uuid).first())
+    product = Product.objects.filter(uuid=uuid).first()
     if not product:
         raise Http404("Продукт не найден")
 
@@ -124,30 +111,26 @@ def checkout(request):
 
 
 @login_required
-def add_to_cart(request, product_type, uuid):
-    content_type = get_object_or_404(ContentType, model=product_type)
-    model_class = content_type.model_class()
-    product = get_object_or_404(model_class, uuid=uuid)
+def add_to_cart(request,  uuid):
+    product = get_object_or_404(Product, uuid=uuid)
     order, _ = Order.objects.get_or_create(user=request.user, is_draft=True)
-    element = OrderElement.objects.filter(order=order, content_type=content_type, object_id=product.id).first()
+    element = OrderElement.objects.filter(order=order,product=product).first()
     if element:
         element.quantity += 1
         element.save()
     else:
-        OrderElement.objects.create(order=order, content_type=content_type, object_id=product.id, quantity=1,
+        OrderElement.objects.create(order=order, quantity=1, product=product,
                                     price=product.price)
     return redirect("area:shopping-cart")
 
 
 @login_required
-def remove_from_cart(request, product_type, uuid):
-    content_type = get_object_or_404(ContentType, model=product_type)
-    model_class = content_type.model_class()
-    product = get_object_or_404(model_class, uuid=uuid)
+def remove_from_cart(request, uuid):
+    product = get_object_or_404(Product,uuid=uuid)
     order, _ = Order.objects.get_or_create(user=request.user, is_draft=True)
     if not order:
         return redirect("area:shopping-cart")
-    element = OrderElement.objects.filter(order=order, content_type=content_type, object_id=product.id).first()
+    element = OrderElement.objects.filter(order=order, product=product).first()
     if element:
         element.delete()
     return redirect("area:shopping-cart")

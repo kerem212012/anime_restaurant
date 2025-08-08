@@ -5,32 +5,17 @@
     <div class="text-center"><h1>You search '{{ query }}'</h1></div>
     <div  class="text-center mb-3"><h4><span>{{ results_count }}</span> Products found</h4></div>
     <div class="row featured__filter">
-        {% for food in foods %}
-        <div class="col-lg-3 col-md-4 col-sm-6 mix {{ food.category.name }}">
+        {% for product in products %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mix {{ product.category.name }}">
             <div class="featured__item">
-                <div class="featured__item__pic set-bg" data-setbg="{{ food.picture.url }}">
+                <div class="featured__item__pic set-bg" data-setbg="{{ product.picture.url }}">
                     <ul class="featured__item__pic__hover">
-                        <li><a href="{% url 'area:add_to_cart' 'food' food.uuid %}"><i class="fa fa-shopping-cart"></i></a></li>
+                        <li><a href="{% url 'area:add_to_cart' product.uuid %}"><i class="fa fa-shopping-cart"></i></a></li>
                     </ul>
                 </div>
                 <div class="featured__item__text">
-                    <h6><a href="{% url 'area:product' food.uuid %}">{{ food.name }}</a></h6>
-                    <h5>${{ food.price }}</h5>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-        {% for merch in merchs %}
-        <div class="col-lg-3 col-md-4 col-sm-6 mix {{ merch.merch_category.name }}">
-            <div class="featured__item">
-                <div class="featured__item__pic set-bg" data-setbg="{{ merch.picture.url }}">
-                    <ul class="featured__item__pic__hover">
-                        <li><a href="{% url 'area:add_to_cart' 'merch' merch.uuid %}"><i class="fa fa-shopping-cart"></i></a></li>
-                    </ul>
-                </div>
-                <div class="featured__item__text">
-                    <h6><a href="{% url 'area:product' merch.uuid %}">{{ merch.name }}</a></h6>
-                    <h5>${{ merch.price }}</h5>
+                    <h6><a href="{% url 'area:product' product.uuid %}">{{ product.name }}</a></h6>
+                    <h5>${{ product.price }}</h5>
                 </div>
             </div>
         </div>

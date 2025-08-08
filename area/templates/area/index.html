@@ -8,14 +8,7 @@
     <div class="container">
         <div class="row">
             <div class="categories__slider owl-carousel">
-                {% for category in food_categories %}
-                <div class="col-lg-3">
-                    <div class="categories__item set-bg" data-setbg="{{ category.picture.url }}">
-                        <h5><a href="shop">{{ category.name }}</a></h5>
-                    </div>
-                </div>
-                {% endfor %}
-                {% for category in merch_categories %}
+                {% for category in product_categories %}
                 <div class="col-lg-3">
                     <div class="categories__item set-bg" data-setbg="{{ category.picture.url }}">
                         <h5><a href="shop">{{ category.name }}</a></h5>
@@ -39,10 +32,7 @@
                 <div class="featured__controls">
                     <ul>
                         <li class="active" data-filter="*">All</li>
-                        {% for category in food_categories %}
-                        <li data-filter=".{{ category.name }}">{{ category.name }}</li>
-                        {% endfor %}
-                        {% for category in merch_categories %}
+                        {% for category in product_categories %}
                         <li data-filter=".{{ category.name }}">{{ category.name }}</li>
                         {% endfor %}
                     </ul>
@@ -50,32 +40,17 @@
             </div>
         </div>
         <div class="row featured__filter">
-            {% for food in foods %}
-            <div class="col-lg-3 col-md-4 col-sm-6 mix {{ food.category.name }}">
+            {% for product in products %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mix {{ product.category.name }}">
                 <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="{{ food.picture.url }}">
+                    <div class="featured__item__pic set-bg" data-setbg="{{ product.picture.url }}">
                         <ul class="featured__item__pic__hover">
-                            <li><a href="{% url 'area:add_to_cart' 'food' food.uuid %}"><i class="fa fa-shopping-cart"></i></a></li>
+                            <li><a href="{% url 'area:add_to_cart' product.uuid %}"><i class="fa fa-shopping-cart"></i></a></li>
                         </ul>
                     </div>
                     <div class="featured__item__text">
-                        <h6><a href="{% url 'area:product' food.uuid %}">{{ food.name }}</a></h6>
-                        <h5>${{ food.price }}</h5>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-            {% for merch in merchs %}
-            <div class="col-lg-3 col-md-4 col-sm-6 mix {{ merch.merch_category.name }}">
-                <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="{{ merch.picture.url }}">
-                        <ul class="featured__item__pic__hover">
-                            <li><a href="{% url 'area:add_to_cart' 'merch' merch.uuid %}"><i class="fa fa-shopping-cart"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="featured__item__text">
-                        <h6><a href="{% url 'area:product' merch.uuid %}">{{ merch.name }}</a></h6>
-                        <h5>${{ merch.price }}</h5>
+                        <h6><a href="{% url 'area:product' product.uuid %}">{{ product.name }}</a></h6>
+                        <h5>${{ product.price }}</h5>
                     </div>
                 </div>
             </div>
