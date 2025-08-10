@@ -82,6 +82,7 @@ INTERNAL_IPS = [
     "127.0.0.1",
     # ...
 ]
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS")
 WSGI_APPLICATION = 'anime_restaurant.wsgi.application'
 
 # Database
