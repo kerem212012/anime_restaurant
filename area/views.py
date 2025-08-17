@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
@@ -11,7 +10,7 @@ from manager.models import Feedback
 
 
 def index(request):
-    products = Product.objects.all()
+    products = Product.objects.select_related("product_category").all()
     product_categories = ProductCategory.objects.all()
     events = Event.objects.select_related("anime").all()
     context = {
@@ -21,6 +20,14 @@ def index(request):
     }
     return render(request, "area/index.html", context=context)
 
+def products_by_category(request,category):
+    category = get_object_or_404(ProductCategory, name__iexact=category)
+    products = Product.objects.select_related("product_category").filter(product_category=category)
+    return render(request, "area/products-by-category.html" , context={
+        "products":products,
+        "category":category,
+        "results_count": len(products),
+    })
 
 def search(request):
     query = request.GET.get("q", "").strip()
@@ -52,11 +59,13 @@ def contact(request):
 def shop(request):
     min_price = request.GET.get("min_price")
     max_price = request.GET.get("max_price")
+    size = request.GET.get("size")
 
     products = Product.objects.all()
     product_categories = ProductCategory.objects.all()
     products_count = Product.objects.count()
-
+    if size:
+        products = products.filter(size=size)
     if min_price:
         products = products.filter(price__gte=min_price)
     if max_price:
@@ -65,6 +74,7 @@ def shop(request):
         "products": products,
         "product_categories": product_categories,
         "products_count": products_count,
+        "select_size":size
     }
     return render(request, "area/shop.html", context=context)
 

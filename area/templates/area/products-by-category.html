@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Domain & Punch{% endblock %}
+{% block extra_body %}
+    <div class="text-center"><h1>You search '{{ category }}'</h1></div>
+    <div  class="text-center mb-3"><h4><span>{{ results_count }}</span> Products found</h4></div>
+    <div class="row featured__filter">
+        {% for product in products %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mix {{ product.category.name }}">
+            <div class="featured__item">
+                <div class="featured__item__pic set-bg" data-setbg="{{ product.picture.url }}">
+                    <ul class="featured__item__pic__hover">
+                        <li><a href="{% url 'area:add_to_cart' product.uuid %}"><i class="fa fa-shopping-cart"></i></a></li>
+                    </ul>
+                </div>
+                <div class="featured__item__text">
+                    <h6><a href="{% url 'area:product' product.uuid %}">{{ product.name }}</a></h6>
+                    <h5>${{ product.price }}</h5>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

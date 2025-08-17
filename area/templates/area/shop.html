@@ -34,21 +34,21 @@
                         <div class="sidebar__item">
                             <h4>Sizes</h4>
                             <div class="sidebar__item__size">
-                                <label for="large">
+                                <label>
                                     Large
-                                    <input type="radio" id="large">
+                                    <input type="radio" name="size" value="L" {% if request.GET.size == "L" %}checked{% endif %} >
                                 </label>
                             </div>
                             <div class="sidebar__item__size">
-                                <label for="medium">
+                                <label>
                                     Medium
-                                    <input type="radio" id="medium">
+                                    <input type="radio" name="size" value="M" {% if request.GET.size == "M" %}checked{% endif %}>
                                 </label>
                             </div>
                             <div class="sidebar__item__size">
-                                <label for="small">
+                                <label>
                                     Small
-                                    <input type="radio" id="small">
+                                    <input type="radio" name="size" value="S" {% if request.GET.size == "S" %}checked{% endif %}>
                                 </label>
                             </div>
                         </div>
